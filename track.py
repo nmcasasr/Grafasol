@@ -10,12 +10,10 @@ def generate_track(g, n, name):
     root = np.random.randint(0,n)
     edges = nx.bfs_edges(g.G, root)
     nodes = [root] + [v for u, v in edges]
-    track = []
     m = MidiInstrument(4)
     t = Track() 
     t.instrument = m
-    print("##### Creatin Tracks")
-    badNotes = 0
+    print("##### Creating Tracks")
     for x in nodes:
         value = t.add_notes(NoteContainer(g.G.nodes[x]["note"]), g.G.nodes[x]["duration"])
         t.bars[-1].set_meter((n, 1))
