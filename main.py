@@ -4,12 +4,15 @@ import numpy as np
 from graph import Graph
 import track as tk
 import argparse
+import mingus.extra.lilypond as LilyPond
 def randomMusic(n,x,y,m,t):
     g = Graph(n=n, max_x=x, max_y=y, mode=m)
-    tk.generate_track(g,n, t)
+    t = tk.generate_track(g,n, t)
+    bar = LilyPond.from_Track(t)
+    print("Lilypond music sheet: ")
+    print(bar)
     nx.draw(g.G)
     plt.show()
-
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-n", "--nodes", nargs='?', const='nodes')

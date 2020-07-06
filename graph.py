@@ -17,7 +17,7 @@ class Graph:
         self.max_x = max_x
         self.max_y = max_y
         self.mode = mode
-        self.scale = self.get_scale()
+        self.scale = self.get_scale2()
         self.nodes = np.zeros(n,dtype=Graph.Node)
         if(self.mode == 0):
                 print("######## Mode 0 ########")
@@ -49,37 +49,29 @@ class Graph:
         #Getting the average
         self.distances = np.zeros((n,n))
         avg = 0
-        #print("creating nodes")
         for i in range(0,n):
             for j in range(i,n):
                 if(i == j): continue
                 a = (self.nodes[i].x-self.nodes[j].x)
                 b = (self.nodes[i].y-self.nodes[j].y)
                 d = np.sqrt(a*a + b*b)
-                #print("distance between[",i,",",j,"]","=",d)
                 avg += d
                 self.distances[i,j] = d
         avg /= (self.n*(self.n-1))
 
-        #print("Average:", avg)
-
-        #Making friends
-        #dist = random.exponential(scale=avg, size=(self.n, self.n))
-        #print("Making friends!")
         friends = np.zeros(self.n)
         for i in range(0,n):
             for j in range(i,n):
                 if(i == j): continue
                 rn = np.random.uniform(0,1);
-                #print("Checking:","[",i,",",j,"]","for", rn ,"<=", avg/(avg + self.distances[i][j]) ," is ",rn <= avg/(avg + self.distances[i][j]))
                 if(rn <= avg/(avg + self.distances[i][j])):
-                    #if(rn <= 1/(self.distances[i][j]*self.distances[i][j])):
+                #if(rn <= 1/(self.distances[j][i] * self.distances[i][j])):
+                #if(rn <= 1/(self.distances[j][i] + self.distances[i][j])):
                     self.G.add_edge(i,j)
                     self.G.add_edge(j,i)
                     self.nodes[i].edges[j] = self.nodes[j]
                     self.nodes[j].edges[i] = self.nodes[i]
                     friends[i] = friends[i] + 1
-            #print("Node:",self.nodes[i],"\nEdges:\n",self.nodes[i].edges,"\n")
         
         meanFriends = np.mean(friends)
     def get_scale(self):
@@ -119,3 +111,9 @@ class Graph:
         if(scale == 11):
             print("## WholeTone Scale Selected!")
             return scales.WholeTone(note)
+
+    def get_scale2(self):
+        init_note = np.random.randint(0,12)
+        scale = np.random.randint(1,12)
+        note = notes.int_to_note(init_note)
+        return scales.MelodicMinor(note)
